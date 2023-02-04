@@ -2,7 +2,8 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
-import django
+import sqlite3
+import flask
 
 # emails = ['tempestly18@gmail.com']
 # sender_email = "ndatar18@gmail.com"
@@ -17,11 +18,11 @@ import django
 #     message["To"] = receiver_email
 
 #     # Create the plain-text and HTML version of your message
-text = """\
-    Hi,
-    How are you?
-    Real Python has many great tutorials:
-    www.realpython.com"""
+    # text = """\
+    #     Hi,
+    #     How are you?
+    #     Real Python has many great tutorials:
+    #     www.realpython.com"""
 html = """\
     <html>
     <body>
@@ -52,13 +53,30 @@ html = """\
 #         )
 with open('./internships.json') as file:
     internships_data = json.load(file)
-    companies = []
-    links = []
-    locations = []
-    notes = []
-    for item in internships_data:
-        companies.append(item['company'])
-        links.append(item['link'])
-        locations.append(item['location'])
-        notes.append(item['notes'])
-        
+
+companies = []
+links = []
+locations = []
+notes = []
+
+for item in internships_data:
+    companies.append(item['company'])
+    links.append(item['link'])
+    locations.append(item['location'])
+    notes.append(item['notes'])
+
+jobs = []
+
+# for company, link, location, note in zip(companies, links, locations, notes):
+#     # posting = f"""
+#     #     <tr>
+#     #         <td>{company}</td>
+#     #         <td>{link}</td>
+#     #         <td>{location}</td>
+#     #         <td>{note}</td>
+#     #     </tr>
+#     # """
+#     jobs.append(posting)
+
+
+# print(jobs)
