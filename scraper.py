@@ -1,7 +1,10 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import sqlite3
 
+db = sqlite3.connect("data.db")
+cur = db.cursor()
 urls = ['https://github.com/pittcsc/Summer2023-Internships','https://github.com/pittcsc/New-Grad-Positions-2023']
 
 def scrape_page(url):
@@ -21,7 +24,7 @@ def scrape_page(url):
         location = td_elements[i + 1]
         notes = td_elements[i + 2]
 
-        if "Closed" not in location.get_text() and "Closed" not in notes.get_text():
+        if "closed" not in location.get_text().lower() and "closed" not in notes.get_text().lower():
             # check if name has link
             if name.find('a') is not None:
                 a_tag = name.find('a')
@@ -47,6 +50,12 @@ def scrape_page(url):
                 "location": location.get_text(),
                 "notes": notes.get_text()
             })
+
+    # instert/update database with information 
+    for i in range(len(data)):
+        cur.execute("INSERT INTO internships (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, data[i]["company"], data[i]["link"], data[i]["location"], data[i]["notes"]))
+        db.commit()
+
 
     jsonify = json.dumps(data)
     return jsonify
