@@ -51,32 +51,20 @@ html = """\
 #         server.sendmail(
 #             sender_email, receiver_email, message.as_string()
 #         )
-with open('./internships.json') as file:
-    internships_data = json.load(file)
+# with open('./internships.json') as file:
+#     internships_data = json.load(file)
+
+db = sqlite3.connect('./data.db')
+data = db.execute("SELECT * FROM internships")
+data = data.fetchall()
 
 companies = []
 links = []
 locations = []
 notes = []
 
-for item in internships_data:
-    companies.append(item['company'])
-    links.append(item['link'])
-    locations.append(item['location'])
-    notes.append(item['notes'])
-
-jobs = []
-
-# for company, link, location, note in zip(companies, links, locations, notes):
-#     # posting = f"""
-#     #     <tr>
-#     #         <td>{company}</td>
-#     #         <td>{link}</td>
-#     #         <td>{location}</td>
-#     #         <td>{note}</td>
-#     #     </tr>
-#     # """
-#     jobs.append(posting)
-
-
-# print(jobs)
+for item in data:
+    companies.append(item[1])
+    links.append(item[2])
+    locations.append(item[3])
+    notes.append(item[4])

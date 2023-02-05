@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', companies=companies,
-    links=links, locations=locations, notes=notes
+    return render_template('index.html', companies=companies, 
+        links=links, locations=locations, notes=notes, zip=zip               
 )
     
 # @app.route('/signup')
@@ -14,4 +14,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
