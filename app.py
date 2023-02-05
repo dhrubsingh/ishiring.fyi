@@ -1,11 +1,17 @@
-from flask import Flask
-
+from flask import Flask, render_template
+from emails import companies, links, locations, notes
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def index():
-    return "<p>Hello, World!</p>"
+    return render_template('index.html', companies=companies, 
+        links=links, locations=locations, notes=notes, zip=zip               
+)
+    
+# @app.route('/signup')
+# def signup():
+#     pass
 
-@app.route("/emails")
-def email():
-    return "<p> Email page!</p>"
+
+if __name__ == "__main__":
+    app.run(debug=True)
