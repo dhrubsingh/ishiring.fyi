@@ -7,7 +7,7 @@ db = sqlite3.connect("data.db")
 cur = db.cursor()
 urls = ['https://github.com/pittcsc/Summer2023-Internships','https://github.com/pittcsc/New-Grad-Positions-2023']
 
-def scrape_page(url):
+def scrape_page(url, position):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     td_elements = soup.find_all('td')
@@ -70,21 +70,21 @@ def scrape_page(url):
     """
 
     # approach 2: modifying database
-    
-    comps = cur.execute("SELECT company from internships").fetchall()
+
+    comps = cur.execute(f"SELECT company from {position}").fetchall()
     companies = [str(row[0]) for row in comps]
     
     # delete any things in the table that isn't in the scraped data
     for company in companies:
         if company not in data:
-            cur.execute("DELETE FROM internships WHERE company = ?", (company,))
+            cur.execute(f"DELETE FROM {position} WHERE company = ?", (company,))
             db.commit()
     
     # add any thing that is in the data table but not in the SQL table
     for i, entry in enumerate(data.keys()):
         if entry not in companies:
              #print(i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"])
-             cur.execute("INSERT INTO internships (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"]))
+             cur.execute(f"INSERT INTO {position} (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"]))
              db.commit()
 
     #print(data)
@@ -96,7 +96,9 @@ def scrape_page(url):
     return jsonify
     """
 
-internships = scrape_page(urls[0])
+internships = scrape_page(urls[0], "internships")
+newgrad = scrape_page(urls[1], "newgrad")
+
 
 """
 # convert list of dictionaries into a JSON file
