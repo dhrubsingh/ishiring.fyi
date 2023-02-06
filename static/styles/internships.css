@@ -12,7 +12,8 @@
     flex-wrap: wrap;
     padding: 40px;
     min-height: 100vh;
-    background: #3c2846;
+    /* background: #3c2846; */
+    background: #000;
 }
 
 .card {
@@ -64,7 +65,8 @@
     position: relative;
     width: 140px;
     height: 120px;
-    background: #3c2846;
+    /* background: #3c2846; */
+    background: #000;
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
     box-shadow: 0 15px 0 rgba(0, 0, 0, 0.1),
@@ -84,7 +86,8 @@
     height: 50px;
     background: transparent;
     border-top-right-radius: 50px;
-    box-shadow: 15px -15px 0 15px #3c2846;
+    /* box-shadow: 15px -15px 0 15px #3c2846; */
+    box-shadow: 15px -15px 0 15px #000;
 }
 
 .card .icon::after {
@@ -96,7 +99,8 @@
     height: 50px;
     background: transparent;
     border-top-left-radius: 50px;
-    box-shadow: -15px -15px 0 15px #3c2846;
+    /* box-shadow: -15px -15px 0 15px #3c2846; */
+    box-shadow: -15px -15px 0 15px #000;
 }
 
 .card .icon ion-icon {
