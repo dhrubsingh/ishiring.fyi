@@ -7,6 +7,7 @@
     text-align: center;
     color: #fff;
     font-size: large;
+    overflow: auto;
 }
 
 #user {
@@ -21,8 +22,9 @@
 }
 
 .email {
-    display: inline-block;
     vertical-align: middle;
+    overflow: auto;
+    margin: 10px;
 }
 
 #background-video {
@@ -35,4 +37,9 @@
     top: 0;
     bottom: 0;
     z-index: -1;
-  }
+}
+
+.alert {
+    color: red;
+    font-size: medium;
+}

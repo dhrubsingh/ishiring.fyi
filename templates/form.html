@@ -14,21 +14,46 @@
     <source src="../static/videos/signup.mp4" type="video/mp4">
     </video>
 
-    {% if alert == True %}
-        <script>
-            alert("You entered an invalid email. Please try again.");
-        </script>
-    {% endif %}
-
     <div class="submission">
-    <form id="signup">
+    <form id="signup" action="{{ url_for('signup') }}" method="post">
         <div>
         <label for="user">Drop your email for job alerts!</label>
         </div>
         <input type="text" id="user" class="email" name="user" placeholder="Enter email address" autofocus>
-        <button type="button" class="btn btn-primary email">Subscribe</button>
+        <button type="submit" class="btn btn-primary email">Subscribe</button>
+        <div>
+            {% if alert == True %}
+                <!-- <script>
+                    alert("You entered an invalid email. Please try again.");
+                </script> -->
+                <p style="color:red; font-size: small;">
+                    You entered an invalid email address. Please try again.
+                </p>
+            {% endif %}
+
+            {% if success == True %}
+                <!-- <script>
+                    alert("You entered an invalid email. Please try again.");
+                </script> -->
+                <p style="color: green; font-size: small;">
+                    Thanks for signing up for email alerts!
+                </p>
+            {% endif %}
+
+            {% if exists == True %}
+                <!-- <script>
+                    alert("You entered an invalid email. Please try again.");
+                </script> -->
+                <p style="color: white; font-size: small;">
+                    You've already signed up for email alerts.
+                </p>
+            {% endif %} 
+        </div>
     </form>
+
     </div>
+
+    
 
 </body>
 </html>
