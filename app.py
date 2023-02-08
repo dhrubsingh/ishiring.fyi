@@ -15,13 +15,19 @@ def index():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     if (request.method == "POST"):
-        user_email = request.form.get('#signup')
+        user_email = request.form.get('user')
         if (check(user_email)):
             # Finish setting up alert in form.html
-            db = sqlite3.connect('./emails.db')
+            db = sqlite3.connect('./data.db')
             cursor = db.cursor()
+            cursor.execute("CREATE TABLE IF NOT EXISTS user_emails (emails TEXT NOT NULL)")
+
+            
+            cursor.execute("INSERT INTO user_emails (emails) VALUES (?)", user_email)
+            db.commit()
+            return render_template('form.html')
         else:
-            render_template('form.html', alert=True)
+            return render_template('form.html', alert=True)
     else:
         return render_template('form.html')
     
