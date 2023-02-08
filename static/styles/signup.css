@@ -1,0 +1,38 @@
+.submission {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    font-size: large;
+}
+
+#user {
+    width: 300px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    height: 40px;
+}
+
+.email {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#background-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+  }
