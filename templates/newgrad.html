@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/6c94107264.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static',filename='styles/internships.css') }}">
-    <title>Internships</title>
+    <title>New Grad Positions</title>
 </head>
 <body>
 
@@ -23,7 +23,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">Internships <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/">Internships<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
           <a class="nav-link" href="/newgrad">New Grad Positions</a>
@@ -32,7 +32,7 @@
           <a class="nav-link" href="/signup">Signup</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" action=" {{ url_for('index') }}" method="post">
+      <form class="form-inline my-2 my-lg-0" action=" {{ url_for('newgrad') }}" method="post">
         <input class="form-control mr-sm-2 search-bar" type="search" placeholder="Search a city, location, or role" aria-label="Search" name="search-term">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
@@ -40,7 +40,7 @@
   </nav>
 
 <div class="job-guide">
-  <h1>Find internships below!</h1>
+  <h1>Find new grad positions below!</h1>
 </div>
 <div class="job-container">
     
