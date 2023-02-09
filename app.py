@@ -8,15 +8,53 @@ app = Flask(__name__)
 
 
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def index():
-    return render_template('index.html', companies=internships_companies, 
+    if (request.method == "POST"):
+        search_term = request.form.get('search-term').lower()
+        if search_term == "":
+            return render_template('index.html', companies=internships_companies, 
+            links=internships_links, locations=internships_locations, notes=internships_notes, zip=zip)
+        else:
+            # SubSet lists
+            company_ss, links_ss, locations_ss, notes_ss = [[] for _ in range(4)]
+            for company, link, location, note in zip(internships_companies, internships_links, 
+                internships_locations, internships_notes):
+                if (search_term in company.lower()) or (search_term in link.lower()) or (search_term in location.lower()) or (search_term in note.lower()):
+                    company_ss.append(company)
+                    locations_ss.append(location)
+                    links_ss.append(link)
+                    notes_ss.append(note)
+            return render_template('index.html', companies=company_ss, links=links_ss, 
+                locations=locations_ss, notes=notes_ss, zip=zip)
+
+    else:
+        return render_template('index.html', companies=internships_companies, 
         links=internships_links, locations=internships_locations, notes=internships_notes, zip=zip               
 )
 
-@app.route('/newgrad')
+@app.route('/newgrad', methods=["GET", "POST"])
 def newgrad():
-    return render_template('newgrad.html', companies=newgrad_companies, 
+    if (request.method == "POST"):
+        search_term = request.form.get('search-term').lower()
+        if search_term == "":
+            return render_template('newgrad.html', companies=newgrad_companies, 
+            links=newgrad_links, locations=newgrad_locations, notes=newgrad_notes, zip=zip)
+        else:
+            # SubSet lists
+            company_ss, links_ss, locations_ss, notes_ss = [[] for _ in range(4)]
+            for company, link, location, note in zip(newgrad_companies, newgrad_links, 
+                newgrad_locations, newgrad_notes):
+                if (search_term in company.lower()) or (search_term in link.lower()) or (search_term in location.lower()) or (search_term in note.lower()):
+                    company_ss.append(company)
+                    locations_ss.append(location)
+                    links_ss.append(link)
+                    notes_ss.append(note)
+            return render_template('newgrad.html', companies=company_ss, links=links_ss, 
+                locations=locations_ss, notes=notes_ss, zip=zip)
+    
+    else:
+        return render_template('newgrad.html', companies=newgrad_companies, 
         links=newgrad_links, locations=newgrad_locations, notes=newgrad_notes, zip=zip               
 )
 
@@ -54,5 +92,5 @@ def check(user):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='localhost', port=8000)
 
