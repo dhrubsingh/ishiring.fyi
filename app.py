@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-from emails import internships_companies, internships_links, internships_locations, internships_notes
-from emails import newgrad_companies, newgrad_links, newgrad_locations, newgrad_notes
+from load_stored_data import internships_companies, internships_links, internships_locations, internships_notes
+from load_stored_data import newgrad_companies, newgrad_links, newgrad_locations, newgrad_notes
 import re
 import sqlite3
 
@@ -62,7 +62,7 @@ def newgrad():
 def signup():
     if (request.method == "POST"):
         user_email = request.form.get('user')
-        if (check(user_email)):
+        if (check_email_format(user_email)):
             # Finish setting up alert in form.html
             db = sqlite3.connect('./data.db')
             cursor = db.cursor()
@@ -84,7 +84,7 @@ def signup():
         return render_template('form.html')
     
 
-def check(user):
+def check_email_format(user):
     email_format = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     if(re.fullmatch(email_format, user)):
         return True

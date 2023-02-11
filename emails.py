@@ -1,94 +1,70 @@
+import os
 import smtplib, ssl
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import json
+from email.mime.text import MIMEText
 import sqlite3
-import flask
+from scraper import scrape_page
 
-# emails = ['tempestly18@gmail.com']
-# sender_email = "ndatar18@gmail.com"
 
-# for email in emails:
-#     receiver_email = email
-#     password = input("Type your password and press enter:")
+urls = ['https://github.com/pittcsc/Summer2023-Internships','https://github.com/pittcsc/New-Grad-Positions-2023']
+[data_internships, recent_internships] = scrape_page(urls[0], 'internships')
+[data_newgrad, recent_newgrad] = scrape_page(urls[1], 'newgrad')
 
-#     message = MIMEMultipart("alternative")
-#     message["Subject"] = "multipart test"
-#     message["From"] = sender_email
-#     message["To"] = receiver_email
 
-#     # Create the plain-text and HTML version of your message
-    # text = """\
-    #     Hi,
-    #     How are you?
-    #     Real Python has many great tutorials:
-    #     www.realpython.com"""
-html = """\
-    <html>
-    <body>
-        <p>Hi,<br>
-        How are you?<br>
-        <a href="http://www.realpython.com">Real Python</a> 
-        has many great tutorials.
-        </p>
-    </body>
-    </html>
+if recent_internships == [] and recent_newgrad == []:
+    pass
+
+else:
+    db = sqlite3.connect('./data.db')
+    recipients = db.execute('SELECT * from user_emails').fetchall()
+    recipients = [str(row[0]) for row in recipients]
+
+    sender = os.environ.get('EMAIL_ADDRESS')
+    password = os.environ.get('EMAIL_PASSWORD')
+    subject = 'ishiring.fyi - Recent Job Openings'
+    email_body_html = ""
+    email_body_text = ""
+    for company in recent_internships:
+        email_body_html += f"""
+        <tr>
+        <td><a href='{data_internships[company]['link']}'>{company}</a></td>
+        <td>{data_internships[company]['location']}</td>
+        <td>{data_internships[company]['notes']}</td>
+        </tr>"""
+        email_body_text += f"Company: {company} Location: {data_internships[company]['location']}  Note: {data_internships[company]['notes']} Link: {data_internships[company]['link']}\n"
+    
+
+    email_start_html = """
+    <table>
+    <thead>
+    <tr>
+    <th>Company</th>
+    <th>Location</th>
+    <th>Notes</th>
+    </tr>
+    </thead>
+    <tbody>
     """
 
-#     # Turn these into plain/html MIMEText objects
-#     part1 = MIMEText(text, "plain")
-#     part2 = MIMEText(html, "html")
+    email_start_text = "Company Location Notes Link\n"
 
-#     # Add HTML/plain-text parts to MIMEMultipart message
-#     # The email client will try to render the last part first
-#     message.attach(part1)
-#     message.attach(part2)
+    email_end_html = """
+    </tbody>
+    </table>
+    """
 
-#     # Create secure connection with server and send email
-#     context = ssl.create_default_context()
-#     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-#         server.login(sender_email, password)
-#         server.sendmail(
-#             sender_email, receiver_email, message.as_string()
-#         )
-# with open('./internships.json') as file:
-#     internships_data = json.load(file)
+    email_body_html = email_start_html + email_body_html + email_end_html
+    email_body_text = email_start_text + email_body_text
 
-db = sqlite3.connect('./data.db')
-data = db.execute("SELECT * FROM internships")
-data = data.fetchall()
+    msg = MIMEMultipart('alternative')
+    msg['From'] = sender
+    msg['Subject'] = subject
+    msg.attach(MIMEText(email_body_text, 'plain'))
+    msg.attach(MIMEText(email_body_html, 'html'))
+    context = ssl.create_default_context()
 
-internships_companies = []
-internships_links = []
-internships_locations = []
-internships_notes = []
-
-for item in data:
-    internships_companies.append(item[1])
-    internships_links.append(item[2])
-    internships_locations.append(item[3])
-
-    if len(item[4]) < 125:
-        internships_notes.append(item[4])
-    else:
-        internships_notes.append("Software Engineer Intern")
-
-
-# NEW GRAD
-
-data = db.execute("SELECT * FROM newgrad")
-data = data.fetchall()
-
-newgrad_companies = []
-newgrad_links = []
-newgrad_locations = []
-newgrad_notes = []
-
-for item in data:
-    newgrad_companies.append(item[1])
-    newgrad_links.append(item[2])
-    newgrad_locations.append(item[3])
-    if len(item[4]) < 110:
-        newgrad_notes.append(item[4])
-    else:
-        newgrad_notes.append("Graduate Software Engineer")
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(sender, password)
+        for recipient in recipients:
+            msg['To'] = recipient
+            smtp.sendmail(sender, recipient, msg.as_string())
