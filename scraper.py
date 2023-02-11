@@ -81,23 +81,25 @@ def scrape_page(url, position):
             db.commit()
     
     # add any thing that is in the data table but not in the SQL table
+    new_companies = []
     for i, entry in enumerate(data.keys()):
         if entry not in companies:
+             new_companies.append(entry)
              #print(i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"])
              cur.execute(f"INSERT INTO {position} (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"]))
              db.commit()
 
     #print(data)
 
-    return data
+    return [data, new_companies]
 
     """
     jsonify = json.dumps(data)
     return jsonify
     """
 
-internships = scrape_page(urls[0], "internships")
-newgrad = scrape_page(urls[1], "newgrad")
+internships = scrape_page(urls[0], "internships")[0]
+newgrad = scrape_page(urls[1], "newgrad")[0]
 
 
 """
