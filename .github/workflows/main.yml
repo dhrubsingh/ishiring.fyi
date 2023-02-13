@@ -1,0 +1,28 @@
+name: Schedule script
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # runs daily at midnight UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run script
+      run: chmod +x script.sh && ./emails.py
+
+    - name: Commit and push changes
+      uses: actions/github-script@0.10.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.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 }}
+      with:
+        script: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add .
+          git commit -m "Automatic commit from GitHub Actions"
+          git push origin main
