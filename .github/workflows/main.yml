@@ -18,7 +18,7 @@ jobs:
     - name: Commit and push changes
       uses: actions/github-script@0.10.0
       env:
-        GITHUB_TOKEN: ${{ secrets.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 }}
+        GITHUB_TOKEN: ${{ secrets.ISHIRING }}
       with:
         script: |
           git config --global user.email "action@github.com"
