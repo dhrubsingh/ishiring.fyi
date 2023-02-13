@@ -9,13 +9,16 @@ from scraper import scrape_page
 urls = ['https://github.com/pittcsc/Summer2023-Internships','https://github.com/pittcsc/New-Grad-Positions-2023']
 [data_internships, recent_internships] = scrape_page(urls[0], 'internships')
 [data_newgrad, recent_newgrad] = scrape_page(urls[1], 'newgrad')
-
+db = sqlite3.connect('./data.db')
 
 if recent_internships == [] and recent_newgrad == []:
     pass
 
+# if length of new_internships and new_newgrad < 5, don't do anything
+
+
+# if greater than 5, send email and then delete all the entries from new_internships and new_newgrad 
 else:
-    db = sqlite3.connect('./data.db')
     recipients = db.execute('SELECT * from user_emails').fetchall()
     recipients = [str(row[0]) for row in recipients]
 
