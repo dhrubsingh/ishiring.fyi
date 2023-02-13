@@ -12,6 +12,11 @@ def scrape_page(url, position):
     soup = BeautifulSoup(page.content, 'html.parser')
     td_elements = soup.find_all('td')
 
+    relations = {
+        "newgrad":"new_newgrad",
+        "internships": "new_internships",
+    }
+
     # create a dictionary that records links for any keyword
     # get link from company name, if that doesn't exist get link from first note
     # if that doesn't exist, get it from the location
@@ -49,27 +54,7 @@ def scrape_page(url, position):
                 "notes": notes.get_text()
             }
             
-            """
-            data.append({
-                "company": name.get_text(),
-                "link": links[name.get_text()],
-                "location": location.get_text(),
-                "notes": notes.get_text()
-            })
-            """
-
-    # instert/update database with information 
-
-    """# approach 1: delete database, repopulate with newly scraped links
-    cur.execute("DELETE from internships")
-    db.commit()
-
-    for i in range(len(data)):
-        cur.execute("INSERT INTO internships (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, data[i]["company"], data[i]["link"], data[i]["location"], data[i]["notes"]))
-        db.commit()
-    """
-
-    # approach 2: modifying database
+    # modifying database
 
     comps = cur.execute(f"SELECT company from {position}").fetchall()
     companies = [str(row[0]) for row in comps]
@@ -78,7 +63,9 @@ def scrape_page(url, position):
     for company in companies:
         if company not in data:
             cur.execute(f"DELETE FROM {position} WHERE company = ?", (company,))
-            db.commit()
+            # delete from most recent job postings
+            cur.execute()
+            db.commit(f"DELETE FROM {relations[position]} WHERE company = ?", (company,))
     
     # add any thing that is in the data table but not in the SQL table
     new_companies = []
@@ -87,31 +74,15 @@ def scrape_page(url, position):
              new_companies.append(entry)
              #print(i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"])
              cur.execute(f"INSERT INTO {position} (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"]))
+             cur.execute(f"INSERT INTO {relations[position]} (id, company, link, location, notes) VALUES (?, ?, ?, ?, ?)", (i, entry, data[entry]["link"], data[entry]["location"], data[entry]["notes"]))
              db.commit()
-
-    #print(data)
 
     return [data, new_companies]
 
-    """
-    jsonify = json.dumps(data)
-    return jsonify
-    """
+   
 
 internships = scrape_page(urls[0], "internships")[0]
 newgrad = scrape_page(urls[1], "newgrad")[0]
 
 
-"""
-# convert list of dictionaries into a JSON file
-internships = scrape_page(urls[0])
-
-with open("internships.json", "w") as outfile:
-    outfile.write(internships)
-
-new_grad = scrape_page(urls[1])
-with open("newgrad.json", "w") as outfile:
-    outfile.write(new_grad)
-"""
-       
 
