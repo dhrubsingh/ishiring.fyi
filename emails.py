@@ -10,15 +10,16 @@ urls = ['https://github.com/pittcsc/Summer2023-Internships','https://github.com/
 [data_internships, recent_internships] = scrape_page(urls[0], 'internships')
 [data_newgrad, recent_newgrad] = scrape_page(urls[1], 'newgrad')
 db = sqlite3.connect('./data.db')
+cur = db.cursor()
 
-if recent_internships == [] and recent_newgrad == []:
-    pass
 
-# if length of new_internships and new_newgrad < 5, don't do anything
+new_internships = len(cur.execute(f"SELECT company from new_internships").fetchall())
+new_newgrad = len(cur.execute(f"SELECT company from new_newgrad").fetchall())
 
+print(new_internships, new_newgrad)
 
 # if greater than 5, send email and then delete all the entries from new_internships and new_newgrad 
-else:
+if (new_internships > 5 or new_newgrad > 5):
     recipients = db.execute('SELECT * from user_emails').fetchall()
     recipients = [str(row[0]) for row in recipients]
 
@@ -71,3 +72,8 @@ else:
         for recipient in recipients:
             msg['To'] = recipient
             smtp.sendmail(sender, recipient, msg.as_string())
+
+    # delete entries from new_internships and new_newgrad
+    cur.execute("DELETE from new_internships")
+    cur.execute("DELETE from new_newgrad")
+    db.commit()

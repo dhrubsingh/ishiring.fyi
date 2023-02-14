@@ -6,8 +6,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-
-
 @app.route('/', methods=["GET", "POST"])
 def index():
     if (request.method == "POST"):

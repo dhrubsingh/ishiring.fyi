@@ -64,8 +64,8 @@ def scrape_page(url, position):
         if company not in data:
             cur.execute(f"DELETE FROM {position} WHERE company = ?", (company,))
             # delete from most recent job postings
-            cur.execute()
-            db.commit(f"DELETE FROM {relations[position]} WHERE company = ?", (company,))
+            cur.execute(f"DELETE FROM {relations[position]} WHERE company = ?", (company,))
+            db.commit()
     
     # add any thing that is in the data table but not in the SQL table
     new_companies = []
