@@ -15,14 +15,3 @@ jobs:
     - name: Run script
       run: chmod +x script.sh && ./emails.py
 
-    - name: Commit and push changes
-      uses: actions/github-script@0.10.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.ISHIRING }}
-      with:
-        script: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git add .
-          git commit -m "Automatic commit from GitHub Actions"
-          git push origin main
