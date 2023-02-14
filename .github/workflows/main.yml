@@ -12,12 +12,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Update actions/github-script to latest version
-      run: |
-        sed -i 's/actions\/github-script@.*$/actions\/github-script@v4/g' main.yml
+    - name: Update actions/github-script to version 0.10.0
+      run: sed -i 's/actions\/github-script@.*$/actions\/github-script@0.10.0/g' main.yml
 
     - name: Run script
-      uses: actions/github-script@v4
+      uses: actions/github-script@0.10.0
       with:
         script: |
           chmod +x script.sh && ./emails.py
