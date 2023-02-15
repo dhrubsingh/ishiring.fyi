@@ -1,7 +1,7 @@
 [build]
-  command = "conda create --name ishiring.fyi --file environment.yml && conda activate ishiring.fyi && python3 -m flask build && python3 -m flask compress"
+  command = "pip install -r requirements.txt && python3 -m flask build && python3 -m flask compress"
   publish = "dist/"
 
 [build.environment]
   NODE_VERSION = "14"
-  CONDA_VERSION = "4.10.3"
+  PIP_VERSION = "21.3.1"
