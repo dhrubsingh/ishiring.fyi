@@ -1,7 +1,7 @@
 beautifulsoup4
 brotlipy==0.7.0
 bs4
-ca-certificates==2023.01.10
+ca-certificates
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.0.4
