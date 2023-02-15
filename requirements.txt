@@ -1,6 +1,6 @@
-beautifulsoup4==4.11.1
+beautifulsoup4
 brotlipy==0.7.0
-bs4==4.11.1
+bs4
 ca-certificates==2023.01.10
 certifi==2022.12.7
 cffi==1.15.1
