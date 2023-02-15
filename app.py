@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request
+from email_validator import validate_email, EmailNotValidError
+from flask import Flask, render_template, request, jsonify
 from load_stored_data import internships_companies, internships_links, internships_locations, internships_notes
 from load_stored_data import newgrad_companies, newgrad_links, newgrad_locations, newgrad_notes
 import re
 import sqlite3
+import google.auth
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from googleapiclient.errors import HttpError
+from googleapiclient.discovery import build
 
 app = Flask(__name__)
 
@@ -59,6 +65,29 @@ def newgrad():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     if (request.method == "POST"):
+        data = request.get_json()
+        auth_code = data['authCode']
+        try:
+            idinfo = id_token.verify_oauth2_token(
+            auth_code, requests.Request(), CLIENT_ID)
+            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                raise ValueError('Wrong issuer.')
+        except ValueError:
+            return jsonify({'error': 'Invalid auth code.'}), 401
+        except HttpError:
+            return jsonify({'error': 'Failed to verify auth code.'}), 401
+
+        # Extract user information from credential
+        first_name = data['firstName']
+        last_name = data['lastName']
+        email = data['email']
+        print(first_name, last_name, email)
+
+        
+        return jsonify({'message': 'Success'})
+        
+        
+        """
         user_email = request.form.get('user')
         if (check_email_format(user_email)):
             # Finish setting up alert in form.html
@@ -75,20 +104,18 @@ def signup():
             else:
                 cursor.execute("INSERT INTO user_emails (emails) VALUES (?)", (user_email,))
                 db.commit()
-                return render_template('form.html', success=True)
+                return render_template('form2.html', success=True)
         else:
-            return render_template('form.html', alert=True)
+            return render_template('form2.html', alert=True)
+        """
     else:
-        return render_template('form.html')
+        return render_template('form2.html')
     
-
 def check_email_format(user):
     email_format = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     if(re.fullmatch(email_format, user)):
         return True
     return False
 
-
 if __name__ == "__main__":
     app.run(debug=True, host='localhost', port=8000)
-
