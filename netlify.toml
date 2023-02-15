@@ -1,5 +1,5 @@
 [build]
-  command = "gimme 1.19.x && pip install -r requirements.txt && python3 -m flask build && python3 -m flask compress"
+  command = "gimme 1.19.13 && pip install -r requirements.txt && python3 -m flask build && python3 -m flask compress"
   publish = "dist/"
 
 [build.environment]
