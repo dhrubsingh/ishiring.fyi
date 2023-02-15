@@ -1,6 +1,6 @@
 beautifulsoup4
 brotlipy==0.7.0
-bs4==4.11.1
+bs4
 bzip2==1.0.8
 cffi==1.15.1
 certifi==2022.12.7
