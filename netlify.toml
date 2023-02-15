@@ -5,3 +5,23 @@
 [build.environment]
   NODE_VERSION = "14"
   PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
+
+[build.functions]
+  directory = "netlify/functions/"
+
+[[plugins]]
+  package = "netlify-plugin-hashid"
+  [plugins.inputs]
+    folder = "dist/"
+    extensions = ["html", "css", "js", "json", "svg", "png", "jpg", "jpeg", "webp", "gif"]
+
+[[plugins]]
+  package = "netlify-plugin-image-optim"
+  [plugins.inputs]
+    folder = "dist/"
+    ignore = "**/*.+(svg|gif)"
+    lossy = true
+    quality = 75
+    webp = true
+    avif = false
+    concurrent = 10
