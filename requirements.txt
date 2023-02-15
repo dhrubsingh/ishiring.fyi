@@ -1,7 +1,6 @@
 beautifulsoup4
 brotlipy
 bs4
-bzip2
 cffi
 certifi
 charset-normalizer
