@@ -1,5 +1,5 @@
 [build]
-  command = "conda create --name ishiring.fyi --file environment.yml && conda activate ishiring.fyi && python3 -m flask build && python3 -m flask compress"
+  command = "gimme 1.16 && conda create --name ishiring.fyi --file environment.yml && conda activate ishiring.fyi && python3 -m flask build && python3 -m flask compress"
   publish = "dist/"
 
 [build.environment]
