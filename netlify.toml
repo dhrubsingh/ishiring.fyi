@@ -1,7 +1,8 @@
 [build]
-  command = "gimme 1.19.13 && pip install -r requirements.txt && python3 -m flask build && python3 -m flask compress"
+  command = "curl -sL -o gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme && chmod +x gimme && ./gimme 1.19.x && pip install -r requirements.txt && python3 -m flask build && python3 -m flask compress"
   publish = "dist/"
 
 [build.environment]
   NODE_VERSION = "14"
   PIP_VERSION = "21.3.1"
+  PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
