@@ -1,11 +1,6 @@
 [build]
+  image = "node:14"
   command = "curl -sL -o gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme && chmod +x gimme && ./gimme 1.19.x && conda env create -f environment.yml && conda activate ishiring-env && python3 -m flask build && python3 -m flask compress"
-  publish = "dist/"
-
-[build.environment]
-  NODE_VERSION = "14"
-  PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
-
 
 [[plugins]]
   package = "netlify-plugin-hashid"
@@ -23,3 +18,21 @@
     webp = true
     avif = false
     concurrent = 10
+
+[build.environment]
+  NODE_VERSION = "14"
+  PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Content-Security-Policy = "default-src 'self'; frame-ancestors 'none'; manifest-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
