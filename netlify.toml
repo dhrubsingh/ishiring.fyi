@@ -6,8 +6,6 @@
   NODE_VERSION = "14"
   PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
 
-[build.functions]
-  directory = "my-functions"
 
 [[plugins]]
   package = "netlify-plugin-hashid"
