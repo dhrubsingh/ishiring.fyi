@@ -1,6 +1,6 @@
 [build]
-  image = "node:14"
-  command = "curl -sL -o gimme https://raw.githubusercontent.com/travis-ci/gimme/master/gimme && chmod +x gimme && ./gimme 1.19.x && conda env create -f environment.yml && conda activate ishiring-env && python3 -m flask build && python3 -m flask compress"
+  image = "python:3.9"
+  command = "pip install -r requirements.txt && python -m flask build && python -m flask compress"
 
 [[plugins]]
   package = "netlify-plugin-hashid"
@@ -20,8 +20,7 @@
     concurrent = 10
 
 [build.environment]
-  NODE_VERSION = "14"
-  PATH = "/opt/buildhome/.gimme/versions/go1.19.linux.amd64/bin:$PATH"
+  PYTHON_VERSION = "3.9"
 
 [[redirects]]
   from = "/*"

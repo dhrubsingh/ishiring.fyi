@@ -3,3 +3,11 @@ flask
 beautifulsoup4==4.9.3
 requests==2.27.1
 bs4
+alembic==1.6.5
+Flask-Migrate==3.1.0
+Flask-RESTful==0.3.9
+Flask-Script==2.0.6
+gunicorn==20.1.0
+psycopg2-binary==2.9.3
+python-dotenv==0.19.1
+SQLAlchemy==1.4.31
