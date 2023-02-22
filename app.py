@@ -3,8 +3,11 @@ from load_stored_data import internships_companies, internships_links, internshi
 from load_stored_data import newgrad_companies, newgrad_links, newgrad_locations, newgrad_notes
 import re
 import sqlite3
+import os
 
 app = Flask(__name__)
+port = int(os.environ.get('PORT', 8000))
+host = '0.0.0.0'  # Listen on all hosts
 
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -90,5 +93,6 @@ def check_email_format(user):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='localhost', port=8000)
+    print('Listening on port', os.environ['PORT'])
+    app.run(debug=True, host=host, port=port)
 
